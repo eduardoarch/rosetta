@@ -120,6 +120,25 @@ test('core.runAdapter surfaces a graceful error when an adapter returns non-JSON
   assert.match(result.error, /invalid JSON/);
 });
 
+test('core.runAdapter truncates very long stderr when an adapter crashes', async () => {
+  const adapters = discoverAdapters(FIXTURES_DIR);
+  const adapter = adapters.find(
+    (a) => a.manifest.name === 'long-stderr-adapter'
+  );
+
+  assert.ok(adapter, 'long-stderr-adapter fixture must be discoverable');
+
+  const result = await runAdapter(
+    adapter,
+    convertPayload('hello_world', 'camel')
+  );
+
+  assert.equal(result.output, null);
+  assert.match(result.error, /exited with code/);
+  assert.ok(result.error.length < 1000);
+  assert.match(result.error, /\.{3}$/);
+});
+
 test('core.findAdapter returns undefined for an unknown adapter name', () => {
   const adapter = findAdapter(ADAPTERS_DIR, 'does-not-exist');
   assert.equal(adapter, undefined);
