@@ -139,6 +139,28 @@ test('core.runAdapter truncates very long stderr when an adapter crashes', async
   assert.match(result.error, /\.{3}$/);
 });
 
+test('core.runAdapter reports when an adapter command cannot be found', async () => {
+  const adapters = discoverAdapters(FIXTURES_DIR);
+
+  const adapter = adapters.find(
+    (a) => a.manifest.name === 'missing-command-adapter'
+  );
+
+  assert.ok(
+    adapter,
+    'missing-command-adapter fixture must be discoverable'
+  );
+
+  const result = await runAdapter(
+    adapter,
+    convertPayload('hello_world', 'camel')
+  );
+
+  assert.equal(result.output, null);
+  assert.match(result.error, /command not found/i);
+  assert.match(result.error, /adapter\.json/i);
+});
+
 test('core.findAdapter returns undefined for an unknown adapter name', () => {
   const adapter = findAdapter(ADAPTERS_DIR, 'does-not-exist');
   assert.equal(adapter, undefined);

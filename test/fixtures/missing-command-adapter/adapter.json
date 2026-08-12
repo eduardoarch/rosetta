@@ -1,0 +1,6 @@
+{
+  "name": "missing-command-adapter",
+  "language": "Node.js (test fixture)",
+  "description": "Uses a command that does not exist.",
+  "run": "this-command-does-not-exist-rosetta"
+}
