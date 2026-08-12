@@ -133,7 +133,7 @@ function runAdapter(adapter, payload, { timeoutMs = 20000 } = {}) {
       if (code === 127) {
         resolve({
           output: null,
-          error: `Adapter "${adapter.manifest.name}" command not found. ` + `Check the adaoter's in run command in adapter.json.`,
+          error: `Adapter "${adapter.manifest.name}" command not found. ` + `Check the adapter's in run command in adapter.json.`,
         });
         return;
       }
