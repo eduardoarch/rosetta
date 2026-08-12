@@ -131,11 +131,11 @@ function runAdapter(adapter, payload, { timeoutMs = 20000 } = {}) {
       clearTimeout(timer);
 
       if (code !== 0) {
+        const stderrMessage = stderr.trim() ? ` stderr: ${stderr.trim()}` : '';
         resolve({
           output: null,
-          error: `Adapter "${adapter.manifest.name}" exited with code ${code}.${
-            stderr.trim() ? ` stderr: ${stderr.trim()}` : ''
-          }`,
+          error: `Adapter "${adapter.manifest.name}" exited with code ${code}. ` + `Check the adapter's run command in adapter.json.` +
+          stderrMessage,
         });
         return;
       }

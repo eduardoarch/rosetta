@@ -101,13 +101,14 @@ test('Go adapter reports a handled error for empty input', async () => {
   assert.ok(result.error);
 });
 
-test('core.runAdapter surfaces a graceful error when an adapter process crashes', async () => {
+test('core.runAdapter surfaces an actionable error when an adapter process crashes', async () => {
   const adapters = discoverAdapters(FIXTURES_DIR);
   const adapter = adapters.find((a) => a.manifest.name === 'crashing-adapter');
   assert.ok(adapter, 'crashing-adapter fixture must be discoverable');
   const result = await runAdapter(adapter, convertPayload('hello_world', 'camel'));
   assert.equal(result.output, null);
   assert.match(result.error, /exited with code/);
+  assert.match(result.error, /adapter\.json/);
 });
 
 test('core.runAdapter surfaces a graceful error when an adapter returns non-JSON output', async () => {
